@@ -22,20 +22,21 @@ namespace PDF
 	{
 	public:
 		explicit KeywordMatcher(std::string_view term);
-		
-		bool FindMatch(PoDoFo::PdfTokenizer* tokenizer);
-		
+
+		bool FindMatch(PoDoFo::PdfTokenizer *tokenizer);
+
+		BOOST_ATTRIBUTE_NODISCARD
 		std::string_view GetKW() const noexcept;
-	
+
 	private:
 		bool m_isHead;
-		
+
 		bool m_hasMatch;
-		
+
 		std::regex m_regex;
-		
+
 		std::string_view m_term;
-		
+
 		std::string m_keyword;
 	};
 }
