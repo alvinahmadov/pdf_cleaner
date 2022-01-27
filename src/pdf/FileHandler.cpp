@@ -39,6 +39,7 @@ namespace PDF
 			  description(aDescription)
 	{}
 
+	NODISCARD
 	string FileHandler::
 	OptionsInfo::ConcatArgs() const
 	{
@@ -64,8 +65,8 @@ namespace PDF
 		      this->variables);
 		notify(this->variables);
 	}
-
-	BOOST_ATTRIBUTE_UNUSED
+	
+	MAYBE_UNUSED
 	FileHandler::OptionsInfo &
 	FileHandler::ArgumentParser::
 	Options::GetInfo(int index)
@@ -73,6 +74,7 @@ namespace PDF
 		return this->info.at(index);
 	}
 
+	NODISCARD
 	bool FileHandler::ArgumentParser::
 	Options::EmptyPrefix() const
 	{
@@ -87,7 +89,7 @@ namespace PDF
 			  recursive{false},
 			  replace{false}
 	{
-		this->info.emplace_back("help", "h", "Helps");
+		this->info.emplace_back("help", "h", "Print help info");
 		this->info.emplace_back("dir", "d", "Directory to PDF files");
 		this->info.emplace_back("uri", "u", "Uri regex to delete");
 		this->info.emplace_back("prefix", "p", "Prefix to specific files with embedded uris");
@@ -216,7 +218,7 @@ namespace PDF
 		return m_files;
 	}
 
-	BOOST_ATTRIBUTE_UNUSED
+	MAYBE_UNUSED
 	string_view FileHandler::GetUri(size_t index) const
 	{
 		return m_options.uris.at(index);
@@ -247,7 +249,7 @@ namespace PDF
 			genStr.erase(index, 1);
 		}
 
-		return Path(genStr);
+		return {genStr};
 	}
 
 	void FileHandler::Init() noexcept
