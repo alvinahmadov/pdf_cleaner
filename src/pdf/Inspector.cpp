@@ -25,27 +25,6 @@ namespace PDF
 		return res;
 	}
 
-	Properties::Properties(string_view aTitle, string_view aAuthor, string_view aSubject,
-	                       string_view aCreator, string_view aProducer, string_view aKeywords)
-			: title(aTitle),
-			  author(aAuthor),
-			  subject(aSubject),
-			  creator(aCreator),
-			  producer(aProducer),
-			  keywords(aKeywords)
-	{}
-
-	void Properties::Populate(unique_ptr<PdfMemDocument> &document) const
-	{
-		auto pdfInfo = document->GetInfo();
-		pdfInfo->SetTitle(title);
-		pdfInfo->SetAuthor(author);
-		pdfInfo->SetSubject(subject);
-		pdfInfo->SetCreator(creator);
-		pdfInfo->SetProducer(producer);
-		pdfInfo->SetKeywords(keywords);
-	}
-
 	Inspector::Inspector(boost::filesystem::path filePath)
 			: m_state(State::Unedited),
 			  m_keyName(),
@@ -104,7 +83,7 @@ namespace PDF
 		m_keyName.clear();
 	}
 
-	void Inspector::SetDocumentProperties(const Properties &props)
+	void Inspector::SetDocumentProperties(const DocumentProperty &props)
 	{
 		if (not m_document)
 		{
@@ -122,8 +101,8 @@ namespace PDF
 		m_document->Write(outputName.data());
 	}
 
-	BOOST_ATTRIBUTE_NODISCARD
-	BOOST_ATTRIBUTE_UNUSED
+	NODISCARD
+	MAYBE_UNUSED
 	string Inspector::GetStructure() const
 	{
 		stringstream stringStream{};
@@ -211,19 +190,28 @@ namespace PDF
 	void Inspector::ProcessDictionary(PdfDictionary *dictionary)
 	{
 		PdfName objectKeyName(m_keyName);
-
-		for (auto&[key, object] : dictionary->GetKeys())
+		
+		try
 		{
-			if (key == objectKeyName)
+			for(auto& [key, object]: dictionary->GetKeys())
 			{
-				bool removed = dictionary->RemoveKey(objectKeyName);
-				if (removed)
+				if(!object)
+					return;
+				
+				if(key == objectKeyName)
 				{
-					m_state = State::Deleted;
+					bool removed = dictionary->RemoveKey(objectKeyName);
+					if(removed)
+					{
+						m_state = State::Deleted;
+					}
+					continue;
 				}
-				continue;
+				ProcessObject(object);
 			}
-			ProcessObject(object);
+		} catch(exception &e)
+		{
+			printf("Exception was thrown: %s", e.what());
 		}
 	}
 }
