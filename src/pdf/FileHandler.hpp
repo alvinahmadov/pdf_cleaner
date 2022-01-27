@@ -14,6 +14,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
+#include "Common.hpp"
+
 namespace PDF
 {
 	namespace ProgramOptions = boost::program_options;
@@ -39,7 +41,8 @@ namespace PDF
 
 			OptionsInfo(std::string_view aLongArg, std::string_view aDescription);
 
-			std::string ConcatArgs();
+			NODISCARD
+			std::string ConcatArgs() const;
 		};
 
 		struct ArgumentParser
@@ -49,8 +52,8 @@ namespace PDF
 				char prefix{};
 
 				int pageNum{};
-
-				BOOST_ATTRIBUTE_UNUSED
+				
+				MAYBE_UNUSED
 				bool recursive{};
 
 				bool replace{};
@@ -62,10 +65,11 @@ namespace PDF
 				std::vector<OptionsInfo> info;
 
 				Options();
-
+				
+				MAYBE_UNUSED
 				OptionsInfo &GetInfo(int index);
 
-				BOOST_ATTRIBUTE_NODISCARD
+				NODISCARD
 				bool EmptyPrefix() const;
 			};
 
@@ -73,6 +77,7 @@ namespace PDF
 
 			char **argv;
 
+			MAYBE_UNUSED
 			bool parsed;
 
 			boost::program_options::variables_map variables;
@@ -104,6 +109,7 @@ namespace PDF
 
 		const Files &GetFiles() const;
 
+		MAYBE_UNUSED
 		std::string_view GetUri(size_t index = 0) const;
 
 		bool HasPrefix() const;
