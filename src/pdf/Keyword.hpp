@@ -11,6 +11,8 @@
 #include <string>
 #include <regex>
 
+#include "Common.hpp"
+
 namespace PoDoFo
 {
 	class PdfTokenizer;
@@ -25,7 +27,7 @@ namespace PDF
 
 		bool FindMatch(PoDoFo::PdfTokenizer *tokenizer);
 
-		BOOST_ATTRIBUTE_NODISCARD
+		NODISCARD
 		std::string_view GetKW() const noexcept;
 
 	private:
