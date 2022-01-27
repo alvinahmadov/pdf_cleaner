@@ -30,7 +30,7 @@ namespace PDF
 			return !strcmp(data, aData);
 		}
 
-		BOOST_ATTRIBUTE_NODISCARD
+		NODISCARD
 		inline bool IsDelimiter() const
 		{
 			return Compare(delimiter);
