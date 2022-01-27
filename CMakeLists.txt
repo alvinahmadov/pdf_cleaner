@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(pdf_cleaner)
+project(pdf_sanitizer)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -23,6 +23,7 @@ set(PROJECT_LIBRARIES ${PODOFO_LIBRARIES}
         Boost::program_options)
 
 add_subdirectory(src)
-add_executable(pdfuriremove src/main.cpp)
-target_include_directories(pdfuriremove PUBLIC ${PROJECT_INCLUDE_DIRS})
-target_link_libraries(pdfuriremove PUBLIC ${PDFCLEANER_LIB})
+
+add_executable(pdfsanitizer src/main.cpp)
+target_include_directories(pdfsanitizer PUBLIC ${PROJECT_INCLUDE_DIRS})
+target_link_libraries(pdfsanitizer PUBLIC ${PDFCLEANER_LIB})
