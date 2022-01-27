@@ -1,6 +1,7 @@
 #include <thread>
 #include <iostream>
 
+#include "pdf/DocumentProperty.hpp"
 #include "pdf/Inspector.hpp"
 #include "pdf/FileHandler.hpp"
 
@@ -36,7 +37,7 @@ vector<string> split(string &f, char by)
 	return parts;
 }
 
-void cleanFiles(const FileHandler &, FileHandler::Path &, Properties && = {});
+void cleanFiles(const FileHandler &, FileHandler::Path &, DocumentProperty && = {});
 
 void pdfCleaner(int, char **);
 
@@ -54,10 +55,10 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-Properties createPropertyData(const FileHandler::Path &path, char prefix)
+DocumentProperty createPropertyData(const FileHandler::Path &path, char prefix)
 {
 	auto       fileName = path.filename().generic_string();
-	Properties properties{};
+	DocumentProperty properties{};
 
 	fileName.erase(fileName.find(prefix), 1);
 	auto parts = split(fileName, '-');
@@ -66,11 +67,11 @@ Properties createPropertyData(const FileHandler::Path &path, char prefix)
 	{
 		if (parts.size() == 1)
 		{
-			properties = Properties("", parts.at(0));
+			properties = DocumentProperty("", parts.at(0));
 		}
 		else
 		{
-			properties = Properties(parts.at(1), parts.at(0));
+			properties = DocumentProperty(parts.at(1), parts.at(0));
 		}
 	}
 
@@ -104,7 +105,7 @@ void pdfCleaner(int argc, char **argv)
 
 void cleanFiles(const FileHandler &handler,
                 FileHandler::Path &filename,
-                Properties &&props)
+                DocumentProperty &&props)
 {
 	string outputName = (handler.HasPrefix()
 	                     ? handler.RemovePrefix(filename).generic_string()
