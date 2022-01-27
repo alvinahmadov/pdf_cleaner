@@ -12,35 +12,11 @@
 #include <boost/filesystem.hpp>
 #include <podofo/podofo.h>
 
+#include "DocumentProperty.hpp"
 #include "Keyword.hpp"
 
 namespace PDF
 {
-	struct Properties
-	{
-		std::string title;
-
-		std::string author;
-
-		std::string subject;
-
-		std::string creator;
-
-		std::string producer;
-
-		std::string keywords;
-
-		Properties() = default;
-
-		Properties(std::string_view aTitle, std::string_view aAuthor,
-		           std::string_view aSubject = {},
-		           std::string_view aCreator = "Adobe InDesign CS6 (Windows)",
-		           std::string_view aProducer = "Adobe PDF Library 10.0.1",
-		           std::string_view aKeywords = {});
-
-		void Populate(std::unique_ptr<PoDoFo::PdfMemDocument> &document) const;
-	};
-
 	class Inspector
 	{
 		enum State
@@ -55,15 +31,15 @@ namespace PDF
 
 		void Delete(std::string_view uri, int pageIndex = 0);
 
-		void SetDocumentProperties(const Properties &props);
+		void SetDocumentProperties(const DocumentProperty &props);
 
 		void Write(std::string_view outputName);
 
-		BOOST_ATTRIBUTE_NODISCARD
-		BOOST_ATTRIBUTE_UNUSED
+		NODISCARD
+		MAYBE_UNUSED
 		std::string GetStructure() const;
 
-		BOOST_ATTRIBUTE_NODISCARD
+		NODISCARD
 		bool Done() const;
 
 	private:
