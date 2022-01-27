@@ -9,7 +9,7 @@ pkg_check_modules(PODOFO libpodofo)
 find_package(Boost 1.65 COMPONENTS filesystem system program_options)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -pthread")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -Wall -Wattributes -Wextra -O3 -ffp-contract=off -march=native -pthread")
 
 set(PODOFO_INCLUDE_DIRS ${PODOFO_INCLUDE_DIRS})
